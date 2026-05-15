@@ -1,0 +1,260 @@
+/* ======================================================
+   GLOBAL
+====================================================== */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f1f5f9;
+  margin: 0;
+  padding: 0;
+  color: #1e293b;
+}
+
+/* Smooth rendering */
+* {
+  box-sizing: border-box;
+}
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+.sidebar {
+  height: 100vh;
+  width: 240px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+}
+
+.sidebar h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+/* ======================================================
+   SIDEBAR LINKS
+====================================================== */
+.sidebar a {
+  display: block;
+  padding: 12px 20px;
+  margin: 4px 10px;
+  border-radius: 8px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.sidebar a:hover {
+  background-color: #334155;
+  color: white;
+  transform: translateX(4px);
+}
+
+/* Active */
+.sidebar a.active {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Logout */
+.sidebar a.text-danger {
+  color: #f87171 !important;
+}
+
+.sidebar a.text-danger:hover {
+  background-color: #7f1d1d;
+  color: white !important;
+}
+
+/* Divider */
+.sidebar hr {
+  border-color: rgba(255, 255, 255, 0.08);
+  margin: 10px 15px;
+}
+
+/* Section Titles */
+.menu-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 12px 20px 5px 20px;
+  margin-top: 10px;
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+/* ======================================================
+   MAIN CONTENT
+====================================================== */
+.main-content {
+  margin-left: 240px;
+  padding: 25px;
+  min-height: 100vh;
+}
+
+/* ======================================================
+   TOPBAR
+====================================================== */
+.topbar {
+  background: white;
+  padding: 18px 22px;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.topbar h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ======================================================
+   CARDS
+====================================================== */
+.card {
+  border-radius: 14px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+}
+
+/* ======================================================
+   TABLES
+====================================================== */
+.table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.table thead {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.table thead th {
+  border: none !important;
+}
+
+.table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+.btn {
+  border-radius: 8px !important;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* ======================================================
+   BADGES
+====================================================== */
+.badge {
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* ======================================================
+   FORMS
+====================================================== */
+.form-control,
+.form-select {
+  border-radius: 8px !important;
+  font-size: 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+/* ======================================================
+   MODALS
+====================================================== */
+.modal-content {
+  border-radius: 14px !important;
+  border: none !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-footer {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* ======================================================
+   CHARTS
+====================================================== */
+canvas {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+/* ======================================================
+   RESPONSIVE IMPROVEMENT
+====================================================== */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    left: -240px;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}

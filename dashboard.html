@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIS Admin Panel</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Admin CSS -->
+    <link href="../css/admin.css" rel="stylesheet" />
+    <link href="../css/theme.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ✅ SIDEBAR -->
+    <div class="sidebar">
+      <h4 class="text-center py-3">SIS Admin</h4>
+
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="pages/users.html">User Management</a>
+
+      <hr />
+
+      <div class="menu-title">Academic Structure</div>
+      <a href="pages/departments.html">Departments</a>
+      <a href="pages/courses.html">Courses</a>
+      <a href="pages/subjects.html">Subjects</a>
+      <a href="pages/subject-offerings.html">Subject Offerings</a>
+      <a href="pages/enrollments.html">Enrollments</a>
+
+      <hr />
+
+      <div class="menu-title">Academic Records</div>
+      <a href="pages/students.html">Students</a>
+      <a href="pages/teachers.html">Teachers</a>
+      <a href="pages/parents.html">Parents</a>
+      <a href="pages/grades.html">Grades</a>
+      <a href="pages/attendance.html">Attendance</a>
+
+      <hr />
+
+      <a href="#" class="text-danger" onclick="logout()">Logout</a>
+    </div>
+
+    <!-- ✅ MAIN CONTENT -->
+    <div class="main-content">
+      <!-- ✅ TOPBAR -->
+      <div class="topbar mb-4">
+        <h5 id="welcome">Welcome</h5>
+      </div>
+
+      <!-- ✅ STAT CARDS -->
+      <div class="container-fluid">
+        <div class="row g-4" id="dashboardCards"></div>
+      </div>
+
+      <!-- ✅ CHART SECTION -->
+      <div class="container-fluid mt-5">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+              <canvas id="userChart"></canvas>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+              <canvas id="attendanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- ✅ Core Scripts -->
+    <script src="js/core/config.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/rbac.js"></script>
+
+    <!-- ✅ Dashboard Logic -->
+    <script src="js/modules/adminDashboard.js"></script>
+  </body>
+</html>

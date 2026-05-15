@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Management</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Admin CSS -->
+    <link href="../css/admin.css" rel="stylesheet" />
+    <link href="../css/theme.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ■ SIDEBAR -->
+    <div class="sidebar">
+      <h4 class="text-center py-3">SIS Admin</h4>
+
+      <!-- DASHBOARD -->
+      <a href="../dashboard.html">Dashboard</a>
+
+      <!-- USER MANAGEMENT -->
+      <a href="users.html" class="active">User Management</a>
+      <hr />
+
+      <!-- ACADEMIC STRUCTURE -->
+      <div class="menu-title">Academic Structure</div>
+      <a href="departments.html">Departments</a>
+      <a href="courses.html">Courses</a>
+      <a href="subjects.html">Subjects</a>
+      <a href="subject-offerings.html">Subject Offerings</a>
+      <a href="enrollments.html">Enrollments</a>
+      <hr />
+
+      <!-- ACADEMIC RECORDS -->
+      <div class="menu-title">Academic Records</div>
+      <a href="students.html">Students</a>
+      <a href="teachers.html">Teachers</a>
+      <a href="parents.html">Parents</a>
+      <a href="grades.html">Grades</a>
+      <a href="attendance.html">Attendance</a>
+      <hr />
+
+      <a href="#" class="text-danger" onclick="logout()">Logout</a>
+    </div>
+
+    <!-- ■ MAIN CONTENT -->
+    <div class="main-content">
+      <!-- ■ TOPBAR -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <h5>User Management</h5>
+      </div>
+
+      <!-- ■ CONTENT -->
+      <div class="container-fluid mt-4">
+        <!-- ■ ADD BUTTON + SEARCH -->
+        <div class="mb-3">
+          <button class="btn btn-success mb-3" onclick="openAddModal()">
+            + Add User
+          </button>
+
+          <input
+            type="text"
+            id="userSearch"
+            class="form-control w-50"
+            placeholder="Search users..."
+          />
+        </div>
+
+        <!-- ■ USERS TABLE -->
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th width="160">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ■ USER MODAL -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="modalTitle">Add User</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="userId" />
+
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" id="fullName" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Role</label>
+              <select id="role" class="form-select">
+                <option value="">Select role</option>
+                <option value="admin">Admin</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+                <option value="parent">Parent</option>
+              </select>
+            </div>
+
+            <div class="mb-3" id="passwordGroup">
+              <label class="form-label">Password</label>
+              <input type="password" id="password" class="form-control" />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+
+            <button type="button" class="btn btn-primary" onclick="saveUser()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ■ Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ■ Core Scripts -->
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/rbac.js"></script>
+    <script src="../js/core/sidebar.js"></script>
+
+    <!-- ■ Users Module -->
+    <script src="../js/modules/users.js"></script>
+  </body>
+</html>

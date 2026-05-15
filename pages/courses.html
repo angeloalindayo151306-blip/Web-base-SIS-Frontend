@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Courses</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="../css/admin.css" rel="stylesheet" />
+    <link href="../css/theme.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- ✅ SIDEBAR -->
+    <div class="sidebar">
+      <h4 class="text-center py-3">SIS Admin</h4>
+
+      <a href="../dashboard.html">Dashboard</a>
+      <a href="users.html">User Management</a>
+
+      <hr />
+      <div class="menu-title">Academic Structure</div>
+      <a href="departments.html">Departments</a>
+      <a href="courses.html" class="active">Courses</a>
+      <a href="subjects.html">Subjects</a>
+      <a href="subject-offerings.html">Subject Offerings</a>
+      <a href="enrollments.html">Enrollments</a>
+
+      <hr />
+      <div class="menu-title">Academic Records</div>
+      <a href="students.html">Students</a>
+      <a href="teachers.html">Teachers</a>
+      <a href="parents.html">Parents</a>
+      <a href="grades.html">Grades</a>
+      <a href="attendance.html">Attendance</a>
+
+      <hr />
+      <a href="#" class="text-danger" onclick="logout()">Logout</a>
+    </div>
+
+    <!-- ✅ MAIN CONTENT -->
+    <div class="main-content">
+      <div class="topbar">
+        <h5>Courses</h5>
+      </div>
+
+      <div class="container-fluid mt-4">
+        <button class="btn btn-primary mb-3" onclick="openCourseModal()">
+          + Add Course
+        </button>
+
+        <table class="table table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>Course Name</th>
+              <th>Department</th>
+              <th width="220">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="courseTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ✅ COURSE MODAL -->
+    <div class="modal fade" id="courseModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Add Course</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label>Course Name</label>
+              <input id="courseName" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label>Department</label>
+              <select id="courseDepartment" class="form-control"></select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-primary" onclick="saveCourse()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ CURRICULUM MODAL -->
+    <div class="modal fade" id="curriculumModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="curriculumTitle">Manage Curriculum</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="curriculumCourseId" />
+
+            <div class="mb-2">
+              <label>Year Level</label>
+              <select id="curriculumYearLevel" class="form-control">
+                <option value="">Select Year</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label>Semester</label>
+              <select id="curriculumSemester" class="form-control">
+                <option value="">Select Semester</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+
+            <div class="mb-2">
+              <label>Subject</label>
+              <select id="curriculumSubject" class="form-control"></select>
+            </div>
+
+            <button
+              class="btn btn-primary mb-3"
+              onclick="addCurriculumSubject()"
+            >
+              Add Subject
+            </button>
+
+            <hr />
+
+            <div id="curriculumList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/api.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/rbac.js"></script>
+    <script src="../js/core/sidebar.js"></script>
+    <script src="../js/modules/courses.js"></script>
+  </body>
+</html>
