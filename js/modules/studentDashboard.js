@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  async function loadQR() {
+  window.loadQR = async function () {
     try {
       const res = await fetch(API_URL + '/api/students/me/qr', {
         headers: {
