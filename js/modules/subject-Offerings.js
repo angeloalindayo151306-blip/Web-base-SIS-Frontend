@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSchoolYears();
 });
 
+/* ==========================================
+LOAD OFFERINGS
+========================================== */
 async function loadOfferings() {
   const data = await apiRequest('/api/subject-offerings');
   if (!data) return;
@@ -16,13 +19,18 @@ async function loadOfferings() {
   renderOfferings(data);
 }
 
+/* ==========================================
+RENDER TABLE
+========================================== */
 function renderOfferings(offerings) {
   const table = document.getElementById('offeringTable');
   table.innerHTML = '';
 
   offerings.forEach((o) => {
 
-    const daysDisplay = o.days?.join(', ') || '-';
+    const daysDisplay = o.days && o.days.length > 0
+      ? o.days.join(', ')
+      : '-';
 
     table.innerHTML += `
       <tr>
@@ -38,6 +46,7 @@ function renderOfferings(offerings) {
             onclick="editOffering('${o.id}')">
             Edit
           </button>
+
           <button class="btn btn-sm btn-danger"
             onclick="deleteOffering('${o.id}')">
             Delete
@@ -48,12 +57,79 @@ function renderOfferings(offerings) {
   });
 }
 
+/* ==========================================
+OPEN MODAL
+========================================== */
+function openOfferingModal() {
+  document.getElementById('offeringModal').removeAttribute('data-edit-id');
+  offeringModal.show();
+}
+
+/* ==========================================
+LOAD SUBJECTS
+========================================== */
+async function loadSubjects() {
+  const data = await apiRequest('/api/subjects');
+  if (!data) return;
+
+  const select = document.getElementById('offeringSubject');
+  select.innerHTML = '';
+
+  data.forEach((s) => {
+    select.innerHTML += `
+      <option value="${s.id}">
+        ${s.name}
+      </option>
+    `;
+  });
+}
+
+/* ==========================================
+LOAD TEACHERS
+========================================== */
+async function loadTeachers() {
+  const data = await apiRequest('/api/teachers');
+  if (!data) return;
+
+  const select = document.getElementById('offeringTeacher');
+  select.innerHTML = '';
+
+  data.forEach((t) => {
+    select.innerHTML += `
+      <option value="${t.id}">
+        ${t.full_name}
+      </option>
+    `;
+  });
+}
+
+/* ==========================================
+LOAD SCHOOL YEARS
+========================================== */
+async function loadSchoolYears() {
+  const data = await apiRequest('/api/school-years');
+  if (!data) return;
+
+  const select = document.getElementById('offeringSchoolYear');
+  select.innerHTML = '';
+
+  data.forEach((sy) => {
+    select.innerHTML += `
+      <option value="${sy.id}">
+        ${sy.name}
+      </option>
+    `;
+  });
+}
+
+/* ==========================================
+EDIT OFFERING
+========================================== */
 function editOffering(id) {
 
   const offering = allOfferings.find(o => o.id === id);
   if (!offering) return;
 
-  // ✅ MATCH HTML IDs
   document.getElementById('offeringSubject').value = offering.subject_id;
   document.getElementById('offeringTeacher').value = offering.teacher_id;
   document.getElementById('offeringSchoolYear').value = offering.school_year_id;
@@ -72,6 +148,9 @@ function editOffering(id) {
   offeringModal.show();
 }
 
+/* ==========================================
+SAVE OFFERING (CREATE + UPDATE)
+========================================== */
 async function saveSubjectOffering() {
 
   const subject_id = document.getElementById('offeringSubject').value;
@@ -128,6 +207,9 @@ async function saveSubjectOffering() {
   location.reload();
 }
 
+/* ==========================================
+DELETE OFFERING
+========================================== */
 async function deleteOffering(id) {
   if (!confirm('Delete this offering?')) return;
   await apiRequest(`/api/subject-offerings/${id}`, 'DELETE');
