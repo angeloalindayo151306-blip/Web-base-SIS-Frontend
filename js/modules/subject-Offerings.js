@@ -101,20 +101,38 @@ async function loadSchoolYears() {
 }
 
 /* SAVE OFFERING */
-async function saveOffering() {
-  const payload = {
-    subject_id: document.getElementById('offeringSubject').value,
-    teacher_id: document.getElementById('offeringTeacher').value,
-    school_year_id: document.getElementById('offeringSchoolYear').value,
-    semester: document.getElementById('offeringSemester').value,
-    start_time: document.getElementById('offeringStart').value,
-    end_time: document.getElementById('offeringEnd').value,
-  };
+async function saveSubjectOffering() {
 
-  await apiRequest('/api/subject-offerings', 'POST', payload);
+  const subject_id = document.getElementById('subjectSelect').value;
+  const teacher_id = document.getElementById('teacherSelect').value;
+  const school_year = document.getElementById('schoolYearSelect').value;
+  const semester = document.getElementById('semesterSelect').value;
+  const day = document.getElementById('offeringDay').value;
+  const start_time = document.getElementById('startTime').value;
+  const end_time = document.getElementById('endTime').value;
 
-  offeringModal.hide();
-  loadOfferings();
+  if (!subject_id || !teacher_id || !school_year || !semester || !day || !start_time || !end_time) {
+    alert('All fields are required.');
+    return;
+  }
+
+  if (start_time >= end_time) {
+    alert('Start time must be earlier than end time.');
+    return;
+  }
+
+  await apiRequest('/api/subject-offerings', 'POST', {
+    subject_id,
+    teacher_id,
+    school_year,
+    semester,
+    day,
+    start_time,
+    end_time
+  });
+
+  alert('Subject offering created ✅');
+  location.reload();
 }
 
 /* DELETE */
