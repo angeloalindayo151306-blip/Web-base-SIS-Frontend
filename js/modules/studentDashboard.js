@@ -159,6 +159,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  async function loadQR() {
+    try {
+      const res = await fetch(API_URL + '/api/students/me/qr', {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+  
+      if (!res.ok) {
+        console.error('Failed to load QR');
+        return;
+      }
+  
+      const data = await res.json();
+  
+      document.getElementById('studentQRImage').src = data.qr_image;
+      document.getElementById('studentQRContainer').style.display = 'block';
+  
+    } catch (err) {
+      console.error('Error loading QR:', err);
+    }
+  }
+
   /* ==========================================
      GPA CONVERSION
   ========================================== */
@@ -170,3 +193,4 @@ document.addEventListener('DOMContentLoaded', function () {
     return 0;
   }
 });
+
