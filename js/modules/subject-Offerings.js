@@ -3,7 +3,6 @@ let allOfferings = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   offeringModal = new bootstrap.Modal(document.getElementById('offeringModal'));
-
   loadOfferings();
   loadSubjects();
   loadTeachers();
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadOfferings() {
   const data = await apiRequest('/api/subject-offerings');
   if (!data) return;
-
   allOfferings = data;
   renderOfferings(data);
 }
@@ -25,12 +23,18 @@ function renderOfferings(offerings) {
   table.innerHTML = '';
 
   offerings.forEach((o) => {
+
+    const daysDisplay = o.days && o.days.length > 0
+      ? o.days.join(', ')
+      : '-';
+
     table.innerHTML += `
       <tr>
         <td>${o.subject_name}</td>
         <td>${o.teacher_name}</td>
         <td>${o.school_year}</td>
         <td>${o.semester}</td>
+        <td>${daysDisplay}</td>
         <td>${o.start_time || '-'}</td>
         <td>${o.end_time || '-'}</td>
         <td>
@@ -103,15 +107,28 @@ async function loadSchoolYears() {
 /* SAVE OFFERING */
 async function saveSubjectOffering() {
 
-  const subject_id = document.getElementById('subjectSelect').value;
-  const teacher_id = document.getElementById('teacherSelect').value;
-  const school_year = document.getElementById('schoolYearSelect').value;
-  const semester = document.getElementById('semesterSelect').value;
-  const day = document.getElementById('offeringDay').value;
+  const subject_id = document.getElementById('offeringSubject').value;
+  const teacher_id = document.getElementById('offeringTeacher').value;
+  const school_year_id = document.getElementById('offeringSchoolYear').value;
+  const semester = document.getElementById('offeringSemester').value;
+
+  // ✅ MULTI-DAY SELECT
+  const selectedDays = Array.from(
+    document.getElementById('offeringDays').selectedOptions
+  ).map(o => o.value);
+
   const start_time = document.getElementById('startTime').value;
   const end_time = document.getElementById('endTime').value;
 
-  if (!subject_id || !teacher_id || !school_year || !semester || !day || !start_time || !end_time) {
+  if (
+    !subject_id ||
+    !teacher_id ||
+    !school_year_id ||
+    !semester ||
+    selectedDays.length === 0 ||
+    !start_time ||
+    !end_time
+  ) {
     alert('All fields are required.');
     return;
   }
@@ -124,9 +141,9 @@ async function saveSubjectOffering() {
   await apiRequest('/api/subject-offerings', 'POST', {
     subject_id,
     teacher_id,
-    school_year,
+    school_year_id,
     semester,
-    day,
+    days: selectedDays,
     start_time,
     end_time
   });
