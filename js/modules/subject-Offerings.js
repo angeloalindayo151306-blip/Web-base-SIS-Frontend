@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSchoolYears();
 });
 
-/* LOAD OFFERINGS */
 async function loadOfferings() {
   const data = await apiRequest('/api/subject-offerings');
   if (!data) return;
@@ -17,16 +16,13 @@ async function loadOfferings() {
   renderOfferings(data);
 }
 
-/* RENDER TABLE */
 function renderOfferings(offerings) {
   const table = document.getElementById('offeringTable');
   table.innerHTML = '';
 
   offerings.forEach((o) => {
 
-    const daysDisplay = o.days && o.days.length > 0
-      ? o.days.join(', ')
-      : '-';
+    const daysDisplay = o.days?.join(', ') || '-';
 
     table.innerHTML += `
       <tr>
@@ -38,6 +34,11 @@ function renderOfferings(offerings) {
         <td>${o.start_time || '-'}</td>
         <td>${o.end_time || '-'}</td>
         <td>
+          <button class="btn btn-sm btn-warning"
+            onclick="editOffering('${o.id}')">
+            Edit
+          </button>
+
           <button class="btn btn-sm btn-danger"
             onclick="deleteOffering('${o.id}')">
             Delete
@@ -48,63 +49,26 @@ function renderOfferings(offerings) {
   });
 }
 
-/* REQUIRED FUNCTION ✅ */
-function openOfferingModal() {
+function editOffering(id) {
+  const offering = allOfferings.find(o => o.id === id);
+  if (!offering) return;
+
+  document.getElementById('offeringSubject').value = offering.subject_id;
+  document.getElementById('offeringTeacher').value = offering.teacher_id;
+  document.getElementById('offeringSchoolYear').value = offering.school_year_id;
+  document.getElementById('offeringSemester').value = offering.semester;
+  document.getElementById('startTime').value = offering.start_time;
+  document.getElementById('endTime').value = offering.end_time;
+
+  const daySelect = document.getElementById('offeringDays');
+  Array.from(daySelect.options).forEach(option => {
+    option.selected = offering.days.includes(option.value);
+  });
+
+  document.getElementById('offeringModal').setAttribute('data-edit-id', id);
   offeringModal.show();
 }
 
-/* LOAD SUBJECTS */
-async function loadSubjects() {
-  const data = await apiRequest('/api/subjects');
-  if (!data) return;
-
-  const select = document.getElementById('offeringSubject');
-  select.innerHTML = '';
-
-  data.forEach((s) => {
-    select.innerHTML += `
-      <option value="${s.id}">
-        ${s.name}
-      </option>
-    `;
-  });
-}
-
-/* LOAD TEACHERS */
-async function loadTeachers() {
-  const data = await apiRequest('/api/teachers');
-  if (!data) return;
-
-  const select = document.getElementById('offeringTeacher');
-  select.innerHTML = '';
-
-  data.forEach((t) => {
-    select.innerHTML += `
-      <option value="${t.id}">
-        ${t.full_name}
-      </option>
-    `;
-  });
-}
-
-/* LOAD SCHOOL YEARS */
-async function loadSchoolYears() {
-  const data = await apiRequest('/api/school-years');
-  if (!data) return;
-
-  const select = document.getElementById('offeringSchoolYear');
-  select.innerHTML = '';
-
-  data.forEach((sy) => {
-    select.innerHTML += `
-      <option value="${sy.id}">
-        ${sy.name}
-      </option>
-    `;
-  });
-}
-
-/* SAVE OFFERING */
 async function saveSubjectOffering() {
 
   const subject_id = document.getElementById('offeringSubject').value;
@@ -112,7 +76,6 @@ async function saveSubjectOffering() {
   const school_year_id = document.getElementById('offeringSchoolYear').value;
   const semester = document.getElementById('offeringSemester').value;
 
-  // ✅ MULTI-DAY SELECT
   const selectedDays = Array.from(
     document.getElementById('offeringDays').selectedOptions
   ).map(o => o.value);
@@ -120,15 +83,7 @@ async function saveSubjectOffering() {
   const start_time = document.getElementById('startTime').value;
   const end_time = document.getElementById('endTime').value;
 
-  if (
-    !subject_id ||
-    !teacher_id ||
-    !school_year_id ||
-    !semester ||
-    selectedDays.length === 0 ||
-    !start_time ||
-    !end_time
-  ) {
+  if (!subject_id || !teacher_id || !school_year_id || !semester || selectedDays.length === 0) {
     alert('All fields are required.');
     return;
   }
@@ -138,24 +93,36 @@ async function saveSubjectOffering() {
     return;
   }
 
-  await apiRequest('/api/subject-offerings', 'POST', {
-    subject_id,
-    teacher_id,
-    school_year_id,
-    semester,
-    days: selectedDays,
-    start_time,
-    end_time
-  });
+  const editId = document.getElementById('offeringModal').getAttribute('data-edit-id');
 
-  alert('Subject offering created ✅');
+  if (editId) {
+    await apiRequest(`/api/subject-offerings/${editId}`, 'PUT', {
+      subject_id,
+      teacher_id,
+      school_year_id,
+      semester,
+      days: selectedDays,
+      start_time,
+      end_time
+    });
+  } else {
+    await apiRequest('/api/subject-offerings', 'POST', {
+      subject_id,
+      teacher_id,
+      school_year_id,
+      semester,
+      days: selectedDays,
+      start_time,
+      end_time
+    });
+  }
+
+  document.getElementById('offeringModal').removeAttribute('data-edit-id');
   location.reload();
 }
 
-/* DELETE */
 async function deleteOffering(id) {
   if (!confirm('Delete this offering?')) return;
-
   await apiRequest(`/api/subject-offerings/${id}`, 'DELETE');
   loadOfferings();
 }
