@@ -1,13 +1,22 @@
 let allParents = [];
 let currentParentId = null;
-let linkModal;
+let linkModal = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  linkModal = new bootstrap.Modal(document.getElementById('linkModal'));
+
+  // ✅ Safe modal initialization
+  const modalElement = document.getElementById('parentLinkModal');
+  if (modalElement && typeof bootstrap !== 'undefined') {
+    linkModal = new bootstrap.Modal(modalElement);
+  }
+
   loadParents();
   initializeSearch();
 });
 
+/* ======================
+LOAD PARENTS
+====================== */
 async function loadParents() {
   const parents = await apiRequest('/api/parents');
   if (!parents) return;
@@ -16,17 +25,22 @@ async function loadParents() {
   renderParents(parents);
 }
 
+/* ======================
+RENDER TABLE
+====================== */
 function renderParents(parents) {
 
   const table = document.getElementById('parentTable');
+  if (!table) return;
+
   table.innerHTML = '';
 
   parents.forEach((p) => {
 
-    const students = p.students.length
+    const students = p.students && p.students.length
       ? p.students
-        .map((s) => `<span class="badge bg-info me-1">${s.name}</span>`)
-        .join('')
+          .map((s) => `<span class="badge bg-info me-1">${s.name}</span>`)
+          .join('')
       : '-';
 
     table.innerHTML += `
@@ -45,12 +59,18 @@ function renderParents(parents) {
   });
 }
 
+/* ======================
+OPEN MODAL
+====================== */
 async function openLinkModal(parentId) {
 
   currentParentId = parentId;
 
-  const students = await apiRequest('/api/students');
   const select = document.getElementById('parentStudentsSelect');
+  if (!select) return;
+
+  const students = await apiRequest('/api/students');
+  if (!students) return;
 
   select.innerHTML = '';
 
@@ -63,32 +83,50 @@ async function openLinkModal(parentId) {
   });
 
   const parent = allParents.find(p => p.id === parentId);
+  if (!parent) return;
+
   const linkedIds = parent.students.map(s => s.id);
 
   Array.from(select.options).forEach(option => {
     option.selected = linkedIds.includes(option.value);
   });
 
-  linkModal.show();
+  if (linkModal) {
+    linkModal.show();
+  }
 }
 
+/* ======================
+SAVE LINKS
+====================== */
 async function saveParentLinks() {
 
-  const selected = Array.from(
-    document.getElementById('parentStudentsSelect').selectedOptions
-  ).map(o => o.value);
+  if (!currentParentId) return;
+
+  const select = document.getElementById('parentStudentsSelect');
+  if (!select) return;
+
+  const selected = Array.from(select.selectedOptions)
+    .map(o => o.value);
 
   await apiRequest(`/api/parents/${currentParentId}`, 'PUT', {
     student_ids: selected
   });
 
-  linkModal.hide();
+  if (linkModal) {
+    linkModal.hide();
+  }
+
   loadParents();
 }
 
+/* ======================
+SEARCH
+====================== */
 function initializeSearch() {
 
   const input = document.getElementById('parentSearch');
+  if (!input) return;
 
   input.addEventListener('keyup', function () {
 
@@ -104,6 +142,9 @@ function initializeSearch() {
   });
 }
 
+/* ======================
+LOGOUT
+====================== */
 function logout() {
   localStorage.clear();
   window.location.replace('/index.html');
