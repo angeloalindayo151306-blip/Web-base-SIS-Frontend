@@ -38,7 +38,6 @@ function renderOfferings(offerings) {
             onclick="editOffering('${o.id}')">
             Edit
           </button>
-
           <button class="btn btn-sm btn-danger"
             onclick="deleteOffering('${o.id}')">
             Delete
@@ -54,12 +53,13 @@ function editOffering(id) {
   const offering = allOfferings.find(o => o.id === id);
   if (!offering) return;
 
-  document.getElementById('subjectSelect').value = offering.subject_id;
-  document.getElementById('teacherSelect').value = offering.teacher_id;
-  document.getElementById('schoolYearSelect').value = offering.school_year_id;
-  document.getElementById('semesterSelect').value = offering.semester;
-  document.getElementById('startTime').value = offering.start_time;
-  document.getElementById('endTime').value = offering.end_time;
+  // ✅ MATCH HTML IDs
+  document.getElementById('offeringSubject').value = offering.subject_id;
+  document.getElementById('offeringTeacher').value = offering.teacher_id;
+  document.getElementById('offeringSchoolYear').value = offering.school_year_id;
+  document.getElementById('offeringSemester').value = offering.semester;
+  document.getElementById('offeringStart').value = offering.start_time;
+  document.getElementById('offeringEnd').value = offering.end_time;
 
   const daySelect = document.getElementById('offeringDays');
   if (daySelect) {
@@ -69,23 +69,22 @@ function editOffering(id) {
   }
 
   document.getElementById('offeringModal').setAttribute('data-edit-id', id);
-
   offeringModal.show();
 }
 
 async function saveSubjectOffering() {
 
-const subject_id = document.getElementById('subjectSelect').value;
-const teacher_id = document.getElementById('teacherSelect').value;
-const school_year_id = document.getElementById('schoolYearSelect').value;
-const semester = document.getElementById('semesterSelect').value;
+  const subject_id = document.getElementById('offeringSubject').value;
+  const teacher_id = document.getElementById('offeringTeacher').value;
+  const school_year_id = document.getElementById('offeringSchoolYear').value;
+  const semester = document.getElementById('offeringSemester').value;
 
   const selectedDays = Array.from(
     document.getElementById('offeringDays').selectedOptions
   ).map(o => o.value);
 
-  const start_time = document.getElementById('startTime').value;
-  const end_time = document.getElementById('endTime').value;
+  const start_time = document.getElementById('offeringStart').value;
+  const end_time = document.getElementById('offeringEnd').value;
 
   if (!subject_id || !teacher_id || !school_year_id || !semester || selectedDays.length === 0) {
     alert('All fields are required.');
@@ -100,6 +99,7 @@ const semester = document.getElementById('semesterSelect').value;
   const editId = document.getElementById('offeringModal').getAttribute('data-edit-id');
 
   if (editId) {
+
     await apiRequest(`/api/subject-offerings/${editId}`, 'PUT', {
       subject_id,
       teacher_id,
@@ -109,7 +109,9 @@ const semester = document.getElementById('semesterSelect').value;
       start_time,
       end_time
     });
+
   } else {
+
     await apiRequest('/api/subject-offerings', 'POST', {
       subject_id,
       teacher_id,
@@ -119,6 +121,7 @@ const semester = document.getElementById('semesterSelect').value;
       start_time,
       end_time
     });
+
   }
 
   document.getElementById('offeringModal').removeAttribute('data-edit-id');
