@@ -50,31 +50,35 @@ function renderOfferings(offerings) {
 }
 
 function editOffering(id) {
+
   const offering = allOfferings.find(o => o.id === id);
   if (!offering) return;
 
-  document.getElementById('offeringSubject').value = offering.subject_id;
-  document.getElementById('offeringTeacher').value = offering.teacher_id;
-  document.getElementById('offeringSchoolYear').value = offering.school_year_id;
-  document.getElementById('offeringSemester').value = offering.semester;
+  document.getElementById('subjectSelect').value = offering.subject_id;
+  document.getElementById('teacherSelect').value = offering.teacher_id;
+  document.getElementById('schoolYearSelect').value = offering.school_year_id;
+  document.getElementById('semesterSelect').value = offering.semester;
   document.getElementById('startTime').value = offering.start_time;
   document.getElementById('endTime').value = offering.end_time;
 
   const daySelect = document.getElementById('offeringDays');
-  Array.from(daySelect.options).forEach(option => {
-    option.selected = offering.days.includes(option.value);
-  });
+  if (daySelect) {
+    Array.from(daySelect.options).forEach(option => {
+      option.selected = offering.days.includes(option.value);
+    });
+  }
 
   document.getElementById('offeringModal').setAttribute('data-edit-id', id);
+
   offeringModal.show();
 }
 
 async function saveSubjectOffering() {
 
-  const subject_id = document.getElementById('offeringSubject').value;
-  const teacher_id = document.getElementById('offeringTeacher').value;
-  const school_year_id = document.getElementById('offeringSchoolYear').value;
-  const semester = document.getElementById('offeringSemester').value;
+const subject_id = document.getElementById('subjectSelect').value;
+const teacher_id = document.getElementById('teacherSelect').value;
+const school_year_id = document.getElementById('schoolYearSelect').value;
+const semester = document.getElementById('semesterSelect').value;
 
   const selectedDays = Array.from(
     document.getElementById('offeringDays').selectedOptions
