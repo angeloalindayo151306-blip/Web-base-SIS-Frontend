@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================
-   LOAD ENROLLMENTS
+LOAD ENROLLMENTS
+Now shows Student | Department | Semester
 ========================================== */
 async function loadEnrollments() {
   const enrollments = await apiRequest('/api/enrollments');
@@ -17,9 +18,8 @@ async function loadEnrollments() {
   enrollments.forEach((e) => {
     tbody.innerHTML += `
       <tr>
-        <td>${e.student_name}</td>
-        <td>${e.subject_name}</td>
-        <td>${e.school_year || '-'}</td>
+        <td class="text-start">${e.student_name}</td>
+        <td>${e.department_name || '-'}</td>
         <td>${e.semester}</td>
         <td>
           <button class="btn btn-sm btn-danger"
