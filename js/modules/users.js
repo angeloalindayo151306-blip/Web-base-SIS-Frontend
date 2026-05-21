@@ -2,6 +2,8 @@ let userModal;
 let isEditMode = false;
 let allUsers = [];
 
+console.log("THIS IS THE NEW DELETE VERSION");
+
 document.addEventListener('DOMContentLoaded', () => {
   userModal = new bootstrap.Modal(document.getElementById('userModal'));
   loadUsers();
